@@ -87,7 +87,7 @@ int mini_statement(){
 	char * Details;
 	int selected = 0;
 	char * Amount ;
-	char * Currency;
+	char * Currency ;
 	char * TransactionStatus;
 	char * ReceiptNumber;
 	int i;
@@ -136,7 +136,8 @@ int mini_statement(){
 		cJSON_AddStringToObject(mini_statement ,"terminalId" ,pos_serial_number);
 		cJSON_AddStringToObject(mini_statement ,"authMode" ,my_authmodes->PIN );
 		cJSON_AddStringToObject(mini_statement ,"walletName" ,walletName );
-		cJSON_AddStringToObject(mini_statement ,"currency" ,"SSP" );
+		cJSON_AddStringToObject(mini_statement ,"currency" ,"SSP");
+
 		cJSON_AddStringToObject(mini_statement ,"userId" ,myLoginPosUser->username);
 
 
@@ -161,7 +162,8 @@ int mini_statement(){
 							Amount = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(ministatement_array , "Amount")));
 							ReceiptNumber = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(ministatement_array , "ReceiptNumber")));
 							TransactionStatus = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(ministatement_array , "TransactionStatus")));
-							Currency = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(ministatement_array , "Currency")));
+							//Currency = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(ministatement_array , "Currency")));
+							Currency = "KES";
 							Details = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(ministatement_array , "Details")));
 
 

@@ -124,6 +124,8 @@ The item->next and ->prev pointers are always zero on return from Duplicate. */
 extern cJSON *cJSON_ParseWithOpts(const char *value,const char **return_parse_end,int require_null_terminated);
 
 extern void cJSON_Minify(char *json);
+extern void custom_cJSON_Minify(char **json);
+
 
 /* Macros for creating things quickly. */
 #define cJSON_AddNullToObject(object,name)		cJSON_AddItemToObject(object, name, cJSON_CreateNull())

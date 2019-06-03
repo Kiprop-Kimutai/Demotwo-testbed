@@ -128,6 +128,7 @@ void register_beneficiary(void){
 	cJSON * response;
 	unsigned char  *fingerprint[800];
 	char * string ;
+	char * transact_string;
 	char  * date , * receipt_no ,  *unformatedDate ,  returned_request_id;
 	//Get  KYC from Table
 
@@ -181,6 +182,7 @@ void register_beneficiary(void){
 		get_request_id(1, &returned_request_id);
 		strcpy(req_id, returned_request_id);*/
 			get_date_and_receipt(0 , &date ,&unformatedDate , &receipt_no);
+			printf("INFORMATTED DATE::%s\n",unformatedDate);
 			//get_request_id(0 , &returned_request_id);
 			cJSON_AddStringToObject(txToPosted,"iccid",read_card_number);
 			cJSON_AddStringToObject(txToPosted,"cardIdentifier",getCharacters);
@@ -188,6 +190,7 @@ void register_beneficiary(void){
 			//cJSON_AddStringToObject(txToPosted,"requestId",returned_request_id);
 			cJSON_AddStringToObject(txToPosted,"requestId","343434");
 			cJSON_AddStringToObject(txToPosted,"date",unformatedDate );
+			//cJSON_AddStringToObject(txToPosted , "date" ,"20190503" );
 			cJSON_AddStringToObject(txToPosted,"terminalId",pos_serial_number);
 			cJSON_AddStringToObject(txToPosted,"authMode",my_authmodes->fingerprint);
 
@@ -212,18 +215,22 @@ void register_beneficiary(void){
 					cJSON * create_new_obj  = cJSON_CreateObject();
 					cJSON_AddItemToObject(create_new_obj , "balances" ,balances );
 					cJSON_AddStringToObject(create_new_obj , "transactions" ,"" );
-					cJSON_AddStringToObject(create_new_obj , "date" ,unformatedDate );
+					get_date_and_receipt(0 , &date ,&unformatedDate , &receipt_no);
+					printf("UNFORMATTED DATE::%s\n",unformatedDate);
+					cJSON_AddStringToObject(create_new_obj , "date" ,unformatedDate);
+					//cJSON_AddStringToObject(create_new_obj , "date" ,"20190503" );
 					cJSON_AddNumberToObject(create_new_obj , "transacted" ,0 );
 					cJSON_AddNumberToObject(create_new_obj , "txnC" ,0 );
 					printf("Value  to  card:  %s\n" , cJSON_Print(create_new_obj));
 
 
 
-					char * transact_string;
 					transact_string   = cJSON_Print(create_new_obj);
-					cJSON_Minify(transact_string);
+					printf(">>>>>>>Balances JSON before minify %s\n",transact_string);
+					//cJSON_Minify(transact_string);
 					cJSON_Minify(string);
 					printf(">>>>>>>JSON %s\n", string);
+					printf(">>>>>>>Balances JSON %s\n",transact_string);
 					personalizecard(string,fp_response ,  transact_string , read_card_number );
 					//}
 					/*			else
@@ -308,9 +315,12 @@ void do_beneficiary_transaction( int option){
 		//cJSON * new_txs = cJSON_CreateObject();
 		int i= 0 ,  w=0;
 		char  *  transaction_file2 = malloc(strlen (transaction_file) + 2);
+		printf("********watcher*********************%s\n",transaction_file);
 		strcpy(transaction_file2  , transaction_file);
 			//printf("The : %s\n" ,  transaction_file);
 		pretty_printf(transaction_file ,  100);
+		printf("********watcher*********************%s\n",transaction_file2);
+
 
 		personal_details_string =  malloc(strlen(personal_details)+ 2);
 		strcpy(personal_details_string  ,personal_details );
@@ -570,6 +580,8 @@ void do_beneficiary_transaction( int option){
 									//if Post and get_feedback is ok
 									tx_count = 0;
 									resp = post_transaction_file("card",new_transaction, &returned_balances ,0  , &tx_count );
+									printf("resp from post transaction is :%d \n",resp);
+
 									if(resp){
 										cJSON * new_transaction_json = cJSON_CreateObject();
 										char  * data_to_be_written;
@@ -985,15 +997,16 @@ void fetch_beneficary_balances( void){
 						cJSON_ReplaceItemInObject(new_transaction_json ,"txnL" , cJSON_CreateNumber(strlen(strl) +  number_length(strlen(strl)) -1));
 
 						char * data_to_be_written = cJSON_Print(new_transaction_json);
-						cJSON_Minify(data_to_be_written);
+						/**********JACKTIE SHTICKS CONTINUE***********************/
+						//cJSON_Minify(data_to_be_written);
 						printf("I am writting  :  %s\n", data_to_be_written);
 						//If write card is ok
 						//writefile(int fd,uint8_t keyno,char MF[3],char APP[3],char authkey,char transactiondata,char* personaldetails)
 						returned  = cardoperations(2,"", &tx ,&tx,fingerprint , "" ,  data_to_be_written , read_card_number , &new_read_card_number);
-
+						printf("----------------------->\n");
 						if(returned){
 
-							print_receipt("CARD BALANCE RECEIPT" , resp_balances_result ,   &printflag ,   &print_complete) ;
+							print_receipt("CARD BALANCE RECEIPT" , resp_balances_result ,   &printflag ,   &print_complete);
 							print_complete = 1;
 							if(print_complete)
 							{
@@ -1780,7 +1793,9 @@ int  post_transaction_file(char  * transaction_source, char * transaction , cJSO
 			y++;
 		}
 	}
-	printf("initial json\n");
+	//I am writting
+	printf("initial json\n");;;
+	message_display_function(1,"", "Posting Transaction","Please wait .." ,"Sending Request" ,( char *) NULL  );
 	if(send_gprs_request("Transactions" , final_transaction , my_endpoint->beneficary_transaction,  &response_json , display_messages ))
 	{
 

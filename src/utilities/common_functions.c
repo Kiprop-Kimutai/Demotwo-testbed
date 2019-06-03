@@ -154,6 +154,7 @@ void get_date_and_receipt (int required_output,  char ** returned_date , char **
 	printf("unformatted_date : %s\n" , *unformatted_date);
 	strftime(timebuffer, SIZE, "%Y-%m-%d %H:%M:%S", loctime);
 	*returned_date  = timebuffer;
+	printf("returned date:%s\n",timebuffer);
 
 }
 

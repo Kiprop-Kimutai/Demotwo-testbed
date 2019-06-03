@@ -100,10 +100,6 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 	char myholder[100];
 	//const char * utf8text = string_covert(disp_text, strlen(disp_text));
 
-
-
-
-
 	lcd_clean();
 	screen_header();
 	lcd_printf(ALG_LEFT, "Prepare for print...");
@@ -178,20 +174,12 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 		font_32->GetHeight(font_32, &height);
 		surface->SetFont(surface, font_32);
 		y += height - 8;
-
-
-
-
 		surface1->SetFont(surface1, font_32);
 		surface1->DrawString(surface1, "", -1,x, y, DSTF_TOPCENTER);
 		surface1->DrawString(surface1, "", -1,x, y, DSTF_TOPCENTER);
 		surface1->DrawString(surface1, "", -1,x, y, DSTF_TOPCENTER);
 		surface1->DrawString(surface1, "", -1,x, y, DSTF_TOPCENTER);
 		//y += height + 1;
-
-
-
-
 		surface->SetFont(surface, font_24);
 		font_24->GetHeight(font_24, &height);
 
@@ -250,7 +238,8 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 			int i;
 			cJSON *balance_array;
 			char  tmp_str[100];
-
+			char * currency = "KES";
+			//strcpy(currency,"KES");
 			surface->SetFont(surface, font_24);
 			font_24->GetHeight(font_24, &height);
 
@@ -276,7 +265,9 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 				surface->DrawString(surface, "Balance", -1, 5, y,DSTF_TOPLEFT);
 				surface->DrawString(surface, ":", -1, 130, y,DSTF_TOPLEFT);
 				y += height + 1;
-				sprintf (tmp_str , "%s . %s" , get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array,"currency"))) , cJSON_Print(cJSON_GetObjectItem(balance_array , "balance")) );
+				sprintf (tmp_str , "%s . %s" , currency, cJSON_Print(cJSON_GetObjectItem(balance_array , "balance")) );
+
+				//sprintf (tmp_str , "%s . %s" , get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array,"currency"))) , cJSON_Print(cJSON_GetObjectItem(balance_array , "balance")) );
 				surface->DrawString(surface, tmp_str, -1, 70, y,DSTF_TOPLEFT);
 				y += height + 1;
 				surface->DrawString(surface, "______________________________", -1,x, y, DSTF_TOPCENTER);
@@ -288,6 +279,8 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 		}
 		if(strcmp(type_of_receipt ,"TRANSACTION RECEIPT") == 0)
 		{
+			char * currency;
+			strcpy(currency,"KES");
 			char tmp_str[200];
 			surface->SetFont(surface, font_24);
 			font_24->GetHeight(font_24, &height);
@@ -311,7 +304,9 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 			surface->DrawString(surface, "Transaction Amount", -1, 5, y,DSTF_TOPLEFT);
 			surface->DrawString(surface, ":", -1, 154, y,DSTF_TOPLEFT);
 			y += height + 1;
-			sprintf (tmp_str , "%s . %s" , get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(transaction,"currency"))) , get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(transaction,"amount"))) );
+			//sprintf (tmp_str , "%s . %s" , get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(transaction,"currency"))) , get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(transaction,"amount"))) );
+
+			sprintf (tmp_str , "%s . %s" , currency , get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(transaction,"amount"))) );
 
 			surface->DrawString(surface,tmp_str, -1, 70, y,DSTF_TOPLEFT);
 			y += height + 1;
@@ -374,8 +369,13 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 				surface->DrawString(surface, "Balance", -1, 5, y,DSTF_TOPLEFT);
 				surface->DrawString(surface, ":", -1, 130, y,DSTF_TOPLEFT);
 				y += height + 1;
-				sprintf (tmp_str , "%s . %s" , get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array,"currency"))) , cJSON_Print(cJSON_GetObjectItem(balance_array , "balance")) );
-				surface->DrawString(surface, tmp_str, -1, 70, y,DSTF_TOPLEFT);
+				char * currency = "KES";
+					//strcpy(currency,"KES");
+
+				//sprintf (tmp_str , "%s . %s" , get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array,"currency"))) , cJSON_Print(cJSON_GetObjectItem(balance_array , "balance")) );
+					sprintf (tmp_str , "%s . %s" , currency , cJSON_Print(cJSON_GetObjectItem(balance_array , "balance")) );
+
+					surface->DrawString(surface, tmp_str, -1, 70, y,DSTF_TOPLEFT);
 				y += height + 1;
 				surface->DrawString(surface, "______________________________", -1,x, y, DSTF_TOPCENTER);
 				y += height + 1;
@@ -406,7 +406,9 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 
 				char * receiptNumber = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "ReceiptNumber")));
 				char * transactionStatus = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "TransactionStatus")));
-				char * currency = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "Currency")));
+				//char * currency = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "Currency")));
+			char * currency = "KES";
+			//strcpy(currency,"KES");
 				char * amount = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "Amount")));
 				char * initiatedTime = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "InitiatedTime")));
 				char * details = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "Details")));
@@ -423,6 +425,8 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 					surface->DrawString(surface,"ReceiptNo: ", -1, rectangle_x, y, DSTF_TOPLEFT);
 					surface->DrawString(surface, receiptNumber, -1,rectangle_x+135, y, DSTF_TOPLEFT);
 					y += height + 1;
+
+
 				/*	char  balance1[50];
 					sprintf(balance1,"%.2f" ,balance);*/
 					surface->DrawString(surface, "TxnStatus ", -1, rectangle_x, y, DSTF_TOPLEFT);
@@ -463,11 +467,16 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 						double balance;
 						cJSON * balance_array;
 						char * card_wallet_id ;
-						char * currency;
+						char * currency = "KES";
+						//*********************
+
+						//strcpy(currency,"KES");
+
+						//*******************
 						 balance_array = cJSON_GetArrayItem(transaction,i);
 						balance = atof(cJSON_Print(cJSON_GetObjectItem(balance_array , "balance")));
 						card_wallet_id = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "wallet")));
-						currency = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "currency")));
+						//currency = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "currency")));
 
 						printf ("%d: card_wallet : %s currency : %s balance : %1f\n" , i+1 , card_wallet_id, currency, balance);
 						surface->DrawString(surface,"--------------------------------------------------------", -1, rectangle_x, y, DSTF_TOPLEFT);
@@ -499,7 +508,11 @@ int print_receipt(char * type_of_receipt , cJSON * transaction ,   int * printfl
 
 								char * receiptNumber = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "ReceiptNumber")));
 								char * transactionStatus = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "TransactionStatus")));
-								char * currency = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "Currency")));
+								//*********************
+								char * currency = "KES";
+								//strcpy(currency,"KES");
+								//char * currency = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "Currency")));
+								//*********************
 								char * amount = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "Amount")));
 								char * initiatedTime = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "InitiatedTime")));
 								char * details = get_string_from_jason_object(cJSON_Print(cJSON_GetObjectItem(balance_array , "Details")));

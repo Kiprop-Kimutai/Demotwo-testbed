@@ -720,6 +720,8 @@ int createtransactionfile(int fd,uint8_t keyno,char MF[3],char *authkey ,  char 
 	}
 }
 
+//New C Number
+//----------------------------------------------------------------------------------------------------
 int cardoperations(int operation,char *data , char ** personal_details ,char ** transaction_file,  BYTE * fingerprint[] , char  *  input_personal_details , char  * input_transaction_data , char  * card_number ,  char ** card_uid_to_be_obtained){
 	desfire_appinfo benapp2;
 	(benapp2).AID[0]=0x11;
@@ -876,6 +878,7 @@ int cardoperations(int operation,char *data , char ** personal_details ,char ** 
 								beep(2000 ,  200);
 								desfire_deactive(fd);
 								mif_close(fd);
+								printf("exiting....\n");
 								return writeops;
 
 							}
@@ -1013,6 +1016,7 @@ int readfile(int fd,uint8_t keyno,char MF[3],char APP[3],char *authkey,char ** p
 			strcpy(gbl_str ,txndetails );
 			*transaction_file = txndetails;
 			printf("<==========done============>\n");
+			//2:
 		}
 		else{
 			printf("Failed to read card with status ret %d corresponding to errno %d\n",ret,errno);
